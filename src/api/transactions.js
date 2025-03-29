@@ -11,6 +11,7 @@ export const addTransaction = async (transaction) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(transaction),
   });
+  return response.json();
 };
 
 export const updateTransaction = async (id, transaction) => {
