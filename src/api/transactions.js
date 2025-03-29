@@ -1,7 +1,7 @@
 const API_URL = "https://finance-app-3myj.onrender.com";
 
 export const getTransactions = async () => {
-  const response = await fetch(`${API_URL}/all`);
+  const response = await fetch(`${API_URL}/transactions/all`);
   return response.json();
 };
 
