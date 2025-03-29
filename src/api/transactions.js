@@ -1,4 +1,4 @@
-const API_URL = "https://finance-app-3myj.onrender.com/";
+const API_URL = "https://finance-app-3myj.onrender.com/all";
 
 export const getTransactions = async () => {
   const response = await fetch(`${API_URL}/all`);

@@ -1,33 +1,38 @@
-import { useState } from "react";
-import TransactionForm from "../components/TransactionForm";
-import { Card, CardContent, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const Transactions = () => {
   const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const addTransaction = (transaction) => {
-    setTransactions([...transactions, transaction]);
-  };
+  useEffect(() => {
+    fetch("https://finance-app-3myj.onrender.com/transactions/all")
+      .then(response => response.json())
+      .then(data => {
+        console.log("Fetched transactions:", data);
+        setTransactions(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching transactions:", error);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div>
-      <h1>Transactions</h1>
-      <TransactionForm onSubmit={addTransaction} />
-      
       <h2>Transaction List</h2>
-      {transactions.length === 0 ? (
-        <p>No transactions yet.</p>
-      ) : (
-        transactions.map((t, index) => (
-          <Card key={index} style={{ marginBottom: "10px" }}>
-            <CardContent>
-              <Typography variant="h6">{t.description}</Typography>
-              <Typography color={t.type === "income" ? "green" : "red"}>
-                {t.type}: ${t.amount}
-              </Typography>
-            </CardContent>
-          </Card>
+      {loading ? <p>Loading...</p> : null}
+      {transactions.length > 0 ? (
+        transactions.map((transaction) => (
+          <div key={transaction._id} style={{ border: "1px solid #ddd", padding: "10px", margin: "5px" }}>
+            <p><strong>{transaction.description}</strong></p>
+            <p>Type: {transaction.type}</p>
+            <p>Amount: ${transaction.amount}</p>
+            <p>Date: {new Date(transaction.date).toLocaleString()}</p>
+          </div>
         ))
+      ) : (
+        <p>No transactions found.</p>
       )}
     </div>
   );
