@@ -1,25 +1,26 @@
-import axios from "axios";
+const API_URL = "https://finance-app-3myj.onrender.com/";
 
-const API_URL = "http://localhost:5000/transactions";
-
-// Fetch all transactions
 export const getTransactions = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/all`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching transactions:", error);
-    return [];
-  }
+  const response = await fetch(`${API_URL}/all`);
+  return response.json();
 };
 
-// Add a new transaction
 export const addTransaction = async (transaction) => {
-  try {
-    const response = await axios.post(`${API_URL}/add`, transaction);
-    return response.data;
-  } catch (error) {
-    console.error("Error adding transaction:", error);
-    return null;
-  }
+  await fetch(`${API_URL}/add`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(transaction),
+  });
+};
+
+export const updateTransaction = async (id, transaction) => {
+  await fetch(`${API_URL}/update/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(transaction),
+  });
+};
+
+export const deleteTransaction = async (id) => {
+  await fetch(`${API_URL}/delete/${id}`, { method: "DELETE" });
 };
